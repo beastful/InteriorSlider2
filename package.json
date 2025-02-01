@@ -1,0 +1,21 @@
+{
+  "name": "interiorviewer",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.5"
+  },
+  "dependencies": {
+    "@pmndrs/vanilla": "^1.20.2",
+    "@voxelful/multimediator": "^0.0.2",
+    "@voxelful/queueeventemitter": "^0.0.3",
+    "three": "^0.172.0",
+    "uniqolor": "^1.1.1"
+  }
+}

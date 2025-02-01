@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('myfont.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}  
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* background: linear-gradient(to bottom, #071B26 0%,#071B26 30%,#8A3B12 80%,#240E03 100%); */
+  /* background: linear-gradient(to bottom, #163C52 0%,#4F4F47 30%,#C5752D 60%,#B7490F 80%, #2F1107 100%); */
+  background: radial-gradient(#242424, #070707);
+  font-family: Roboto, 'Segoe UI';
+}

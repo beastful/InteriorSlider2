@@ -53,6 +53,7 @@ export class ThreeDefaults extends QueueEventEmitter {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.maxPolarAngle = Math.PI / 2
         this.controls.minDistance = 3.5
+        this.controls.enableDamping = true
 
         this.clock = new THREE.Clock();
         document.body.appendChild(this.renderer.domElement);

@@ -22,11 +22,11 @@ import { DoubleSide } from 'three';
 import uniqolor from 'uniqolor';
 import house_1_layer_1_url from './models/house_1_skeleton_layer_1.glb?url'
 // import house_1_layer_2_url from './models/house_1_skeleton_layer_2.glb?url'
-import house_2_url from './models/house_2_skeleton.glb?url'
-import house_3_url from './models/house_3_skeleton.glb?url'
-import house_5_url from './models/house_5_skeleton.glb?url'
-import house_4_url from './models/house_4_skeleton.glb?url'
-import house_40_url from './models/house_40_skeleton.glb?url'
+// import house_2_url from './models/house_2_skeleton.glb?url'
+// import house_3_url from './models/house_3_skeleton.glb?url'
+// import house_5_url from './models/house_5_skeleton.glb?url'
+// import house_4_url from './models/house_4_skeleton.glb?url'
+// import house_40_url from './models/house_40_skeleton.glb?url'
 import { MeshStandardMaterial } from 'three';
 import { MeshPhongMaterial } from 'three';
 import { MeshLambertMaterial } from 'three';
@@ -40,6 +40,12 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { PMREMGenerator } from 'three';
 import { BackSide } from 'three';
 import { Color } from 'three';
+import house_2_url from './models/v1/h1.glb?url'
+import house_3_url from './models/v1/h2.glb?url'
+import house_5_url from './models/v1/h3.glb?url'
+import house_4_url from './models/v1/h4.glb?url'
+import house_40_url from './models/v1/h5.glb?url'
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 new Slider()
 new ButtonLeft()
@@ -86,21 +92,16 @@ new GlobalEnvMap().getEnv((envMap) => {
 })
 
 class ModelMesh extends ConfiguredMesh {
-  constructor(model, mediator) {
+  constructor(model, mediator, isDraco) {
     super(mediator)
     this.loading_screen = new MultiMediator('loading_screen')
     this.model = model
     this.useModel(this.model)
-    
+
     this.tags = this.model.name.split('_')
-    this.model.material = new MeshBasicMaterial({
-      color: new Color('#eaeaea'),
-      transparent: true,
-      side: DoubleSide,
-    })
 
     this.model.scale.multiplyScalar(0.2)
-    this.model.material.needsUpdate = true;
+    this.model.material.metalness = 0.5
     if (this.tags.includes('hide')) {
       new HideChip(this.model, this)
     }
@@ -143,33 +144,36 @@ class ModelMesh extends ConfiguredMesh {
         })
       })
     }
-    if (this.tags.includes('map')) {
-      const n = this.tags.findIndex((e) => {
-        return e == 'map'
-      })
-      const m = `/${this.tags[n + 1]}.png`
+    // if (this.tags.includes('map')) {
+    //   const n = this.tags.findIndex((e) => {
+    //     return e == 'map'
+    //   })
+    //   const m = `/${this.tags[n + 1]}.png`
 
-      
-      new TextureLoader().load(m, (img) => {
-        console.log(m)
-        img.flipY = false
-        console.log(this.model.geometry.attributes)
-        console.log(img.channel)
-        img.channel = 1
 
-        this.model.material = new MeshBasicMaterial({
-          // color: 0xFFFFFF,
-          transparent: true,
-          map: img,
-          side: DoubleSide
-        })
+    //   new TextureLoader().load(m, (img) => {
+    //     console.log(m)
+    //     img.flipY = false
+    //     console.log(this.model.geometry.attributes)
+    //     console.log(img.channel)
+    //     img.channel = 1
 
-        this.model.material.map = img
-        this.model.material.needsUpdate = true;
-        this.model.material.map.needsUpdate = true;
-      });
-    }
-    this.loading_screen.emit('load')
+    //     this.model.material = new MeshBasicMaterial({
+    //       // color: 0xFFFFFF,
+    //       transparent: true,
+    //       map: img,
+    //       side: DoubleSide
+    //     })
+
+    //     this.model.material.map = img
+    //     this.model.material.needsUpdate = true;
+    //     this.model.material.map.needsUpdate = true;
+    //   });
+    // }
+    setTimeout(() => {
+      this.loading_screen.emit('load')
+    }, 2000)
+    
   }
 }
 
@@ -183,10 +187,13 @@ class LoadingScreen extends QueueEventEmitter {
     this.channel.on('load', this.load.bind(this))
 
     this.dom = document.createElement('div')
-    this.dom.innerHTML = `
-    <svg version="1.1" style='width: 100px;' id="L3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    this.dom.innerHTML += `
+    <img width='150' src='/logo.png'/>
+    `
+    this.dom.innerHTML += `
+    <svg version="1.1" style='width: 70px;' id="L3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
     viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-    <circle fill="none" stroke="#000" stroke-width="4" cx="50" cy="50" r="44" style="opacity:0.5;"/>
+    <circle fill="none" stroke="#fff" stroke-width="4" cx="50" cy="50" r="44" style="opacity:0.5;"/>
     <circle fill="#000" stroke="#fff" stroke-width="3" cx="8" cy="54" r="6" >
     <animateTransform
       attributeName="transform"
@@ -198,17 +205,22 @@ class LoadingScreen extends QueueEventEmitter {
     </circle>
     </svg>
     `
+   
+   
     this.dom.style.width = '100%'
     this.dom.style.height = '100vh'
-    this.dom.style.background = '#fff'
+    this.dom.style.background = '#000'
     this.dom.style.position = 'fixed'
     this.dom.style.top = '0px'
     this.dom.style.left = '0px'
     this.dom.style.zIndex = '10'
     this.dom.style.display = 'flex'
+    this.dom.style.flexDirection = 'column'
     this.dom.style.alignItems = 'center'
     this.dom.style.justifyContent = 'center'
     this.dom.style.transition = '0.8s'
+    this.dom.style.width = '100%'
+    this.dom.style.gap = '200px'
 
     document.body.appendChild(this.dom)
   }
@@ -223,6 +235,7 @@ class LoadingScreen extends QueueEventEmitter {
     this.channel.emit('change', this.waiting, this.loaded)
     if (this.waiting == this.loaded) {
       this.dom.style.left = '-100%'
+      this.channel.emit('loaded')
     }
   }
 }
@@ -230,19 +243,31 @@ class LoadingScreen extends QueueEventEmitter {
 new LoadingScreen()
 
 class Skeleton extends QueueEventEmitter {
-  constructor(url, channel) {
+  constructor(url, channel, isDraco) {
     super()
     this.loading_screen = new MultiMediator('loading_screen')
     this.slide = channel
     this.url = url
+    this.loading_screen.emit('wait')
+
+
+    
+    // const loader = new DRACOLoader();
+
+    // // Specify path to a folder containing WASM/JS decoding libraries.
+    // loader.setDecoderPath('/draco/');
+
+    // // Optional: Pre-fetch Draco WASM/JS module.
+    // loader.preload();
+
     // this.loading_screen.emit('wait')
     this.loader = new GLTFLoader().load(this.url, (gltf) => {
       const scene = gltf.scene;
-      this.loading_screen.emit('wait')
+      
       // this.loading_screen.emit('load')
       new ThreeDefaults().scene.add(scene)
       scene.traverse((obj) => {
-        if (obj.type == 'Mesh') new ModelMesh(obj, this.slide)
+        if (obj.type == 'Mesh') new ModelMesh(obj, this.slide, isDraco)
       })
       // scene.children.map(obj => {
       //   if (obj.type == 'Mesh') new ModelMesh(obj, this.slide)
@@ -255,5 +280,4 @@ new Skeleton(house_3_url, new MultiMediator('slide_1'))
 new Skeleton(house_5_url, new MultiMediator('slide_2'))
 new Skeleton(house_4_url, new MultiMediator('slide_3'))
 new Skeleton(house_2_url, new MultiMediator('slide_4'))
-new Skeleton(house_1_layer_1_url, new MultiMediator('slide_5'))
-// new Skeleton(house_1_layer_2_url, new MultiMediator('slide_5'))
+new Skeleton(house_40_url, new MultiMediator('slide_5'))

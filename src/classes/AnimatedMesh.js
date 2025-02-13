@@ -8,17 +8,17 @@ export class AnimatedMesh extends Model {
       super(mediator)
       this.settings = {
         right: {
-          x: 10,
+          x: 30000,
           y: 0,
           z: 0,
         },
         top: {
           x: 0,
-          y: 10,
+          y: 30000,
           z: 0,
         },
         left: {
-          x: -10,
+          x: -30000,
           y: 0,
           z: 0,
         },
@@ -62,7 +62,12 @@ export class AnimatedMesh extends Model {
       })
   
       this.model_opacity.on('update', (vector) => {
-        model.material.opacity = vector.opacity
+        // model.material.opacity = vector.opacity
+        if(vector.opacity <= 0.1) {
+          if( model.visible ) model.visible = false
+        } else {
+          if( !model.visible ) model.visible = true
+        }
       })
   
       this.hideImmidiate()

@@ -45,9 +45,9 @@ export class ThreeDefaults extends QueueEventEmitter {
         });
 
        
-        this.renderer.toneMapping = ACESFilmicToneMapping;
+        this.renderer.toneMapping = AgXToneMapping;
         THREE.ColorManagement.enabled = true;
-        this.renderer.toneMappingExposure = 0.9;
+        this.renderer.toneMappingExposure = 1;
         this.renderer.outputColorSpace = LinearSRGBColorSpace;
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -67,8 +67,8 @@ export class ThreeDefaults extends QueueEventEmitter {
         this.delta = this.clock.getDelta()
         this.controls.update();
 
-        this.scene.add(new AmbientLight(0xFFFFFF, 10))
-        const directionalLight = new DirectionalLight(0xffffff, 2);
+        this.scene.add(new AmbientLight(0xFFFFFF, 20))
+        const directionalLight = new DirectionalLight(0xffffff, 5);
         this.scene.add(directionalLight);
 
         // const helper = new DirectionalLightHelper(directionalLight, 1);

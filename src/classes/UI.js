@@ -39,9 +39,12 @@ export class ButtonLeft extends UI {
 
         this.append(this.el)
         this.el.addEventListener('click', this.click.bind(this))
+        new MultiMediator('loading_screen').on('loaded', () => {
+            this.can_slide = true
+        })
     }
     click() {
-        new MultiMediator('controls').emit('prev_slide')
+        if(this.can_slide) new MultiMediator('controls').emit('prev_slide')
     }
     update() {
         if (window.innerWidth < 800) {
@@ -78,9 +81,13 @@ export class ButtonRight extends UI {
 
         this.append(this.el)
         this.el.addEventListener('click', this.click.bind(this))
+
+        new MultiMediator('loading_screen').on('loaded', () => {
+            this.can_slide = true
+        })
     }
     click() {
-        new MultiMediator('controls').emit('next_slide')
+        if(this.can_slide) new MultiMediator('controls').emit('next_slide')
     }
     update() {
         if (window.innerWidth < 800) {
